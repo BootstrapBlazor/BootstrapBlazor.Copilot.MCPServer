@@ -1,0 +1,1 @@
+# BootstrapBlazor.Copilot.MCPServer
