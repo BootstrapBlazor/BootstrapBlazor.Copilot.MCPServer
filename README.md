@@ -105,7 +105,7 @@ Configure the following options in `appsettings.json`:
 ```json
 {
   "McpToolConfig": {
-    "ServerUrl": "https://localhost:3001"
+    "ServerUrl": "http://localhost:3001"
   },
   "GitRepository": {
     "LocalPath": "C:\\temp\\BootstrapBlazorRepo"  // Optional: custom local repository path
@@ -280,6 +280,12 @@ This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE
 - [.NET Aspire Documentation](https://learn.microsoft.com/en-us/dotnet/aspire/)
 
 ## Version History
+
+### v1.1.0
+- Update the component model, add example file and documentation file attributes
+- Correct the file search logic to look for example code only in the Samples directory
+- Update the MCP server version number and the way to access configuration items
+- Adjust the ServerUrl configuration in the development environment to use HTTP protocol
 
 ### v1.0.0
 - Initial release
