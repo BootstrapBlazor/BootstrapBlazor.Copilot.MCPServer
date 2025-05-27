@@ -1,4 +1,4 @@
-using BootstrapBlazor.Copilot.MCPServer.Models;
+﻿using BootstrapBlazor.Copilot.MCPServer.Models;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -63,7 +63,7 @@ public class ComponentDocumentationService
 
                 var component = new Component { Name = directoryName };
                 
-                // Add files information
+                // Add source files information
                 foreach (var file in componentFiles)
                 {
                     var fileName = Path.GetFileName(file);
@@ -95,6 +95,53 @@ public class ComponentDocumentationService
                 if (string.IsNullOrEmpty(component.Description))
                 {
                     component.Description = $"{directoryName} component";
+                }
+                
+                // 修正：只在 Samples 目录下查找 example code
+                var pluralComponentName = directoryName.EndsWith("s") ? directoryName : $"{directoryName}s";
+                var sampleRazor = Path.Combine(_samplesPath, $"{pluralComponentName}.razor");
+                var sampleCodeBehind = Path.Combine(_samplesPath, $"{pluralComponentName}.razor.cs");
+
+                if (File.Exists(sampleRazor))
+                {
+                    component.ExampleFiles.Add(new ComponentFile
+                    {
+                        Name = Path.GetFileName(sampleRazor),
+                        Type = "razor",
+                        Path = sampleRazor.Replace(_gitRepositoryManager.GetRepositoryPath(), "").TrimStart('\\', '/')
+                    });
+                }
+                if (File.Exists(sampleCodeBehind))
+                {
+                    component.ExampleFiles.Add(new ComponentFile
+                    {
+                        Name = Path.GetFileName(sampleCodeBehind),
+                        Type = "cs",
+                        Path = sampleCodeBehind.Replace(_gitRepositoryManager.GetRepositoryPath(), "").TrimStart('\\', '/')
+                    });
+                }
+
+                // Look for documentation files in the docs path
+                var docsDir = Path.Combine(_docsPath, directoryName);
+                if (Directory.Exists(docsDir))
+                {
+                    var docFiles = Directory.GetFiles(docsDir)
+                        .Where(f => Path.GetExtension(f).ToLower() == ".md")
+                        .ToList();
+                    
+                    foreach (var file in docFiles)
+                    {
+                        var fileName = Path.GetFileName(file);
+                        var fileType = Path.GetExtension(file).TrimStart('.').ToLower();
+                        var relativePath = file.Replace(_gitRepositoryManager.GetRepositoryPath(), "").TrimStart('\\', '/');
+                        
+                        component.DocumentationFiles.Add(new ComponentFile 
+                        { 
+                            Name = fileName,
+                            Type = fileType,
+                            Path = relativePath
+                        });
+                    }
                 }
                 
                 components.Add(component);
@@ -140,88 +187,28 @@ public class ComponentDocumentationService
                 _logger.LogWarning("Component directory not found: {ComponentDir}", componentDir);
             }
             
-            // Find example files - check in three potential locations
-            
-            // 1. Direct component folder in Components directory
-            var exampleDir = Path.Combine(_docsPath, componentName);
-            var foundExamples = false;
-            
-            if (Directory.Exists(exampleDir))
+            // 修正：只在 Samples 目录下查找 example code
+            var pluralComponentName = componentName.EndsWith("s") ? componentName : $"{componentName}s";
+            var sampleRazor = Path.Combine(_samplesPath, $"{pluralComponentName}.razor");
+            var sampleCodeBehind = Path.Combine(_samplesPath, $"{pluralComponentName}.razor.cs");
+
+            if (File.Exists(sampleRazor))
             {
-                var exampleFiles = Directory.GetFiles(exampleDir);
-                
-                foreach (var file in exampleFiles)
+                componentFiles.ExampleFiles.Add(new ComponentFileInfo
                 {
-                    var fileName = Path.GetFileName(file);
-                    var fileType = Path.GetExtension(file).TrimStart('.').ToLower();
-                    var relativePath = file.Replace(_gitRepositoryManager.GetRepositoryPath(), "").TrimStart('\\', '/');
-                    
-                    componentFiles.ExampleFiles.Add(new ComponentFileInfo 
-                    {
-                        FileName = fileName,
-                        FileType = fileType,
-                        Path = relativePath
-                    });
-                }
-                foundExamples = componentFiles.ExampleFiles.Any();
+                    FileName = Path.GetFileName(sampleRazor),
+                    FileType = "razor",
+                    Path = sampleRazor.Replace(_gitRepositoryManager.GetRepositoryPath(), "").TrimStart('\\', '/')
+                });
             }
-            
-            // 2. Check for plural form in Samples directory
-            if (!foundExamples)
+            if (File.Exists(sampleCodeBehind))
             {
-                var pluralComponentName = componentName.EndsWith("s") ? componentName : $"{componentName}s";
-                var samplePath = Path.Combine(_samplesPath, pluralComponentName);
-                
-                if (Directory.Exists(samplePath))
+                componentFiles.ExampleFiles.Add(new ComponentFileInfo
                 {
-                    var sampleFiles = Directory.GetFiles(samplePath);
-                    
-                    foreach (var file in sampleFiles)
-                    {
-                        var fileName = Path.GetFileName(file);
-                        var fileType = Path.GetExtension(file).TrimStart('.').ToLower();
-                        var relativePath = file.Replace(_gitRepositoryManager.GetRepositoryPath(), "").TrimStart('\\', '/');
-                        
-                        componentFiles.ExampleFiles.Add(new ComponentFileInfo 
-                        {
-                            FileName = fileName,
-                            FileType = fileType,
-                            Path = relativePath
-                        });
-                    }
-                    foundExamples = componentFiles.ExampleFiles.Any();
-                }
-            }
-            
-            // 3. Check for subdirectories in Samples directory
-            if (!foundExamples)
-            {
-                // Look for nested directories in Samples
-                foreach (var sampleSubDir in Directory.GetDirectories(_samplesPath))
-                {
-                    var dirName = new DirectoryInfo(sampleSubDir).Name;
-                    
-                    if (dirName.Equals(componentName, StringComparison.OrdinalIgnoreCase) ||
-                        dirName.StartsWith(componentName, StringComparison.OrdinalIgnoreCase))
-                    {
-                        var nestedFiles = Directory.GetFiles(sampleSubDir, "*.*", SearchOption.AllDirectories);
-                        
-                        foreach (var file in nestedFiles)
-                        {
-                            var fileName = Path.GetFileName(file);
-                            var fileType = Path.GetExtension(file).TrimStart('.').ToLower();
-                            var relativePath = file.Replace(_gitRepositoryManager.GetRepositoryPath(), "").TrimStart('\\', '/');
-                            
-                            componentFiles.ExampleFiles.Add(new ComponentFileInfo 
-                            {
-                                FileName = fileName,
-                                FileType = fileType,
-                                Path = relativePath
-                            });
-                        }
-                        break;
-                    }
-                }
+                    FileName = Path.GetFileName(sampleCodeBehind),
+                    FileType = "cs",
+                    Path = sampleCodeBehind.Replace(_gitRepositoryManager.GetRepositoryPath(), "").TrimStart('\\', '/')
+                });
             }
         }
         catch (Exception ex)
@@ -232,6 +219,13 @@ public class ComponentDocumentationService
         return componentFiles;
     }
 
+    /// <summary>
+    /// Gets the content of a specific file for a component.
+    /// </summary>
+    /// <param name="componentName">The name of the component</param>
+    /// <param name="fileName">The name of the file to retrieve</param>
+    /// <param name="category">Specifies whether to search in source files (FileCategory.Source) or example/sample files (FileCategory.Example)</param>
+    /// <returns>The file content and metadata</returns>
     public FileContent GetFileContent(string componentName, string fileName, FileCategory category)
     {
         var result = new FileContent 
@@ -242,7 +236,7 @@ public class ComponentDocumentationService
         
         try
         {
-            string filePath;
+            string filePath = null;
             
             if (category == FileCategory.Source)
             {
@@ -250,38 +244,22 @@ public class ComponentDocumentationService
             }
             else
             {
-                // First check direct component folder in Components directory
-                filePath = Path.Combine(_docsPath, componentName, fileName);
-                
-                // If not found, check plural form in Samples directory
-                if (!File.Exists(filePath))
+                // 修正：只在 Samples 目录下查找 example code
+                var pluralComponentName = componentName.EndsWith("s") ? componentName : $"{componentName}s";
+                var sampleRazor = Path.Combine(_samplesPath, $"{pluralComponentName}.razor");
+                var sampleCodeBehind = Path.Combine(_samplesPath, $"{pluralComponentName}.razor.cs");
+
+                if (string.Equals(fileName, $"{pluralComponentName}.razor", StringComparison.OrdinalIgnoreCase) && File.Exists(sampleRazor))
                 {
-                    var pluralComponentName = componentName.EndsWith("s") ? componentName : $"{componentName}s";
-                    filePath = Path.Combine(_samplesPath, pluralComponentName, fileName);
+                    filePath = sampleRazor;
                 }
-                
-                // If still not found, search in subdirectories of Samples
-                if (!File.Exists(filePath))
+                else if (string.Equals(fileName, $"{pluralComponentName}.razor.cs", StringComparison.OrdinalIgnoreCase) && File.Exists(sampleCodeBehind))
                 {
-                    foreach (var sampleSubDir in Directory.GetDirectories(_samplesPath))
-                    {
-                        var dirName = new DirectoryInfo(sampleSubDir).Name;
-                        
-                        if (dirName.Equals(componentName, StringComparison.OrdinalIgnoreCase) ||
-                            dirName.StartsWith(componentName, StringComparison.OrdinalIgnoreCase))
-                        {
-                            var matchingFiles = Directory.GetFiles(sampleSubDir, fileName, SearchOption.AllDirectories);
-                            if (matchingFiles.Any())
-                            {
-                                filePath = matchingFiles.First();
-                                break;
-                            }
-                        }
-                    }
+                    filePath = sampleCodeBehind;
                 }
             }
             
-            if (File.Exists(filePath))
+            if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
             {
                 result.Content = File.ReadAllText(filePath);
                 result.FileType = Path.GetExtension(filePath).TrimStart('.').ToLower();
@@ -333,90 +311,30 @@ public class ComponentDocumentationService
                 _logger.LogWarning("Component directory not found: {ComponentDir}", componentDir);
             }
             
-            // Find example code - check in three potential locations
-            
-            // 1. Direct component folder in Components directory
-            var exampleDir = Path.Combine(_docsPath, componentName);
-            var foundExamples = false;
-            
-            if (Directory.Exists(exampleDir))
+            // 修正：只在 Samples 目录下查找 example code
+            var pluralComponentName = componentName.EndsWith("s") ? componentName : $"{componentName}s";
+            var sampleRazor = Path.Combine(_samplesPath, $"{pluralComponentName}.razor");
+            var sampleCodeBehind = Path.Combine(_samplesPath, $"{pluralComponentName}.razor.cs");
+
+            if (File.Exists(sampleRazor))
             {
-                var exampleFiles = Directory.GetFiles(exampleDir);
-                
-                foreach (var file in exampleFiles)
+                documentation.ExampleFiles.Add(new DocumentFile
                 {
-                    var fileName = Path.GetFileName(file);
-                    var fileType = Path.GetExtension(file).TrimStart('.').ToLower();
-                    var content = File.ReadAllText(file);
-                    
-                    documentation.ExampleFiles.Add(new DocumentFile 
-                    {
-                        FileName = fileName,
-                        FileType = fileType,
-                        Content = content
-                    });
-                }
-                foundExamples = documentation.ExampleFiles.Any();
+                    FileName = Path.GetFileName(sampleRazor),
+                    FileType = "razor",
+                    Content = File.ReadAllText(sampleRazor)
+                });
             }
-            
-            // 2. Check for plural form in Samples directory
-            if (!foundExamples)
+            if (File.Exists(sampleCodeBehind))
             {
-                var pluralComponentName = componentName.EndsWith("s") ? componentName : $"{componentName}s";
-                var samplePath = Path.Combine(_samplesPath, pluralComponentName);
-                
-                if (Directory.Exists(samplePath))
+                documentation.ExampleFiles.Add(new DocumentFile
                 {
-                    var sampleFiles = Directory.GetFiles(samplePath);
-                    
-                    foreach (var file in sampleFiles)
-                    {
-                        var fileName = Path.GetFileName(file);
-                        var fileType = Path.GetExtension(file).TrimStart('.').ToLower();
-                        var content = File.ReadAllText(file);
-                        
-                        documentation.ExampleFiles.Add(new DocumentFile 
-                        {
-                            FileName = fileName,
-                            FileType = fileType,
-                            Content = content
-                        });
-                    }
-                    foundExamples = documentation.ExampleFiles.Any();
-                }
+                    FileName = Path.GetFileName(sampleCodeBehind),
+                    FileType = "cs",
+                    Content = File.ReadAllText(sampleCodeBehind)
+                });
             }
-            
-            // 3. Check for subdirectories in Samples directory
-            if (!foundExamples)
-            {
-                // Look for nested directories in Samples
-                foreach (var sampleSubDir in Directory.GetDirectories(_samplesPath))
-                {
-                    var dirName = new DirectoryInfo(sampleSubDir).Name;
-                    
-                    if (dirName.Equals(componentName, StringComparison.OrdinalIgnoreCase) ||
-                        dirName.StartsWith(componentName, StringComparison.OrdinalIgnoreCase))
-                    {
-                        var nestedFiles = Directory.GetFiles(sampleSubDir, "*.*", SearchOption.AllDirectories);
-                        
-                        foreach (var file in nestedFiles)
-                        {
-                            var fileName = Path.GetFileName(file);
-                            var fileType = Path.GetExtension(file).TrimStart('.').ToLower();
-                            var content = File.ReadAllText(file);
-                            
-                            documentation.ExampleFiles.Add(new DocumentFile 
-                            {
-                                FileName = fileName,
-                                FileType = fileType,
-                                Content = content
-                            });
-                        }
-                        break;
-                    }
-                }
-            }
-            
+
             if (!documentation.ExampleFiles.Any())
             {
                 _logger.LogWarning("No example files found for component: {ComponentName}", componentName);

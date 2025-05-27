@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 namespace BootstrapBlazor.Copilot.MCPServer.Models;
 
 public class Component
@@ -5,6 +7,16 @@ public class Component
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public List<ComponentFile> Files { get; set; } = new List<ComponentFile>();
+    
+    /// <summary>
+    /// List of example files associated with this component
+    /// </summary>
+    public List<ComponentFile> ExampleFiles { get; set; } = new List<ComponentFile>();
+    
+    /// <summary>
+    /// List of documentation files associated with this component
+    /// </summary>
+    public List<ComponentFile> DocumentationFiles { get; set; } = new List<ComponentFile>();
 }
 
 public class ComponentFile
@@ -45,6 +57,7 @@ public class FileContentRequest
 {
     public string ComponentName { get; set; } = string.Empty;
     public string FileName { get; set; } = string.Empty;
+    [Description("0=Source Code, 1=Example/Sample Code")]
     public FileCategory Category { get; set; } = FileCategory.Source;
 }
 
@@ -56,8 +69,16 @@ public class FileContent
     public string FileType { get; set; } = string.Empty;
 }
 
+// Add XML documentation to FileCategory enum
 public enum FileCategory
 {
+    /// <summary>
+    /// Indicates that the file is a source code file located in the component's source directory
+    /// </summary>
     Source,
+    
+    /// <summary>
+    /// Indicates that the file is an example or sample file located in documentation or samples directories
+    /// </summary>
     Example
 }
