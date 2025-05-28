@@ -93,7 +93,7 @@ BootstrapBlazor.Copilot.MCPServer/
    ```
 
 4. **Verify the service**
-   The service runs on `https://localhost:3001` by default and supports the following endpoints:
+   The service runs on `http://localhost:3001` by default and supports the following endpoints:
    - `/health` - Health check
    - `/alive` - Liveness check
    - MCP protocol endpoints
