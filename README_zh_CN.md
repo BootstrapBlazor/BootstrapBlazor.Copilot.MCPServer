@@ -93,7 +93,7 @@ BootstrapBlazor.Copilot.MCPServer/
    ```
 
 4. **验证服务**
-   服务默认运行在 `https://localhost:3001`，支持以下端点：
+   服务默认运行在 `http://localhost:3001`，支持以下端点：
    - `/health` - 健康检查
    - `/alive` - 存活检查
    - MCP 协议端点
@@ -105,7 +105,7 @@ BootstrapBlazor.Copilot.MCPServer/
 ```json
 {
   "McpToolConfig": {
-    "ServerUrl": "https://localhost:3001"
+    "ServerUrl": "http://localhost:3001"
   },
   "GitRepository": {
     "LocalPath": "C:\\temp\\BootstrapBlazorRepo"  // 可选：自定义本地仓库路径
