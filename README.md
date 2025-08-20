@@ -1,4 +1,4 @@
-# BootstrapBlazor.Copilot.MCPServer
+# BootstrapBlazor.MCPServer
 
 [中文 README](README_zh_CN.md) | **English README**
 
@@ -6,7 +6,7 @@ A Model Context Protocol (MCP) server that provides AI assistants (like GitHub C
 
 ## Project Overview
 
-BootstrapBlazor.Copilot.MCPServer is an MCP server specifically designed for the BootstrapBlazor framework that can:
+BootstrapBlazor.MCPServer is an MCP server specifically designed for the BootstrapBlazor framework that can:
 
 - 📚 Provide complete documentation for BootstrapBlazor components
 - 🔍 Allow AI assistants to search and browse component source code
@@ -21,8 +21,8 @@ The project is built with .NET 9.0 and ASP.NET Core, including the following mai
 ### Project Structure
 
 ```
-BootstrapBlazor.Copilot.MCPServer/
-├── BootstrapBlazor.Copilot.MCPServer/           # Main service project
+BootstrapBlazor.MCPServer/
+├── BootstrapBlazor.MCPServer/           # Main service project
 │   ├── Services/                                # Core services
 │   │   ├── GitRepositoryManager.cs             # Git repository management
 │   │   └── ComponentDocumentationService.cs    # Component documentation service
@@ -31,8 +31,8 @@ BootstrapBlazor.Copilot.MCPServer/
 │   ├── Models/                                  # Data models
 │   │   └── Component.cs                        # Component-related models
 │   └── Program.cs                              # Application entry point
-├── BootstrapBlazor.Copilot.MCPServer.AppHost/  # Aspire application host
-└── BootstrapBlazor.Copilot.MCPServer.ServiceDefaults/  # Shared service configuration
+├── BootstrapBlazor.MCPServer.AppHost/  # Aspire application host
+└── BootstrapBlazor.MCPServer.ServiceDefaults/  # Shared service configuration
 ```
 
 ### Core Features
@@ -74,8 +74,8 @@ BootstrapBlazor.Copilot.MCPServer/
 
 1. **Clone the project**
    ```bash
-   git clone https://github.com/your-repo/BootstrapBlazor.Copilot.MCPServer.git
-   cd BootstrapBlazor.Copilot.MCPServer
+   git clone https://github.com/your-repo/BootstrapBlazor.MCPServer.git
+   cd BootstrapBlazor.MCPServer
    ```
 
 2. **Restore dependencies**
@@ -86,10 +86,10 @@ BootstrapBlazor.Copilot.MCPServer/
 3. **Run the service**
    ```bash
    # Using Aspire (recommended)
-   dotnet run --project BootstrapBlazor.Copilot.MCPServer.AppHost
+   dotnet run --project BootstrapBlazor.MCPServer.AppHost
 
    # Or run the main project directly
-   dotnet run --project BootstrapBlazor.Copilot.MCPServer
+   dotnet run --project BootstrapBlazor.MCPServer
    ```
 
 4. **Verify the service**
@@ -163,7 +163,7 @@ Add to Claude Desktop configuration file:
   "mcpServers": {
     "bootstrapblazor": {
       "command": "dotnet",
-      "args": ["run", "--project", "path/to/BootstrapBlazor.Copilot.MCPServer"],
+      "args": ["run", "--project", "path/to/BootstrapBlazor.MCPServer"],
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Production"
       }
@@ -254,7 +254,7 @@ Enable detailed logging in development environment:
   "Logging": {
     "LogLevel": {
       "Default": "Debug",
-      "BootstrapBlazor.Copilot.MCPServer": "Trace"
+      "BootstrapBlazor.MCPServer": "Trace"
     }
   }
 }

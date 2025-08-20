@@ -1,18 +1,25 @@
+﻿// Licensed to the BootstrapBlazor Community under one or more agreements.
+// The BootstrapBlazor Community licenses this file to you under the Apache 2.0 License
+// See the LICENSE file in the project root for more information.
+// Maintainer: Argo Zhang(argo@live.ca) Website: https://www.blazor.zone
+
 using System.ComponentModel;
 
-namespace BootstrapBlazor.Copilot.MCPServer.Models;
+namespace BootstrapBlazor.MCPServer.Models;
 
 public class Component
 {
     public string Name { get; set; } = string.Empty;
+
     public string Description { get; set; } = string.Empty;
+
     public List<ComponentFile> Files { get; set; } = new List<ComponentFile>();
-    
+
     /// <summary>
     /// List of example files associated with this component
     /// </summary>
     public List<ComponentFile> ExampleFiles { get; set; } = new List<ComponentFile>();
-    
+
     /// <summary>
     /// List of documentation files associated with this component
     /// </summary>
@@ -76,7 +83,7 @@ public enum FileCategory
     /// Indicates that the file is a source code file located in the component's source directory
     /// </summary>
     Source,
-    
+
     /// <summary>
     /// Indicates that the file is an example or sample file located in documentation or samples directories
     /// </summary>

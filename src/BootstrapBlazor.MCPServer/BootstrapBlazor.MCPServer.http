@@ -1,0 +1,6 @@
+@BootstrapBlazor.MCPServer_HostAddress = http://localhost:5094
+
+GET {{BootstrapBlazor.MCPServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

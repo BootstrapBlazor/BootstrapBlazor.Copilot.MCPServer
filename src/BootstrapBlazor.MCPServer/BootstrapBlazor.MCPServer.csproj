@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BootstrapBlazor.Copilot.MCPServer.ServiceDefaults\BootstrapBlazor.Copilot.MCPServer.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\BootstrapBlazor.MCPServer.ServiceDefaults\BootstrapBlazor.MCPServer.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-# BootstrapBlazor.Copilot.MCPServer
+# BootstrapBlazor.MCPServer
 
 **中文 README** | [English README](README.md)
 
@@ -6,7 +6,7 @@
 
 ## 项目概述
 
-BootstrapBlazor.Copilot.MCPServer 是一个专门为 BootstrapBlazor 框架设计的 MCP 服务器，它可以：
+BootstrapBlazor.MCPServer 是一个专门为 BootstrapBlazor 框架设计的 MCP 服务器，它可以：
 
 - 📚 提供 BootstrapBlazor 组件的完整文档
 - 🔍 允许 AI 助手搜索和浏览组件源代码
@@ -21,8 +21,8 @@ BootstrapBlazor.Copilot.MCPServer 是一个专门为 BootstrapBlazor 框架设�
 ### 项目结构
 
 ```
-BootstrapBlazor.Copilot.MCPServer/
-├── BootstrapBlazor.Copilot.MCPServer/           # 主服务项目
+BootstrapBlazor.MCPServer/
+├── BootstrapBlazor.MCPServer/           # 主服务项目
 │   ├── Services/                                # 核心服务
 │   │   ├── GitRepositoryManager.cs             # Git 仓库管理
 │   │   └── ComponentDocumentationService.cs    # 组件文档服务
@@ -31,8 +31,8 @@ BootstrapBlazor.Copilot.MCPServer/
 │   ├── Models/                                  # 数据模型
 │   │   └── Component.cs                        # 组件相关模型
 │   └── Program.cs                              # 应用入口点
-├── BootstrapBlazor.Copilot.MCPServer.AppHost/  # Aspire 应用主机
-└── BootstrapBlazor.Copilot.MCPServer.ServiceDefaults/  # 共享服务配置
+├── BootstrapBlazor.MCPServer.AppHost/  # Aspire 应用主机
+└── BootstrapBlazor.MCPServer.ServiceDefaults/  # 共享服务配置
 ```
 
 ### 核心功能
@@ -74,8 +74,8 @@ BootstrapBlazor.Copilot.MCPServer/
 
 1. **克隆项目**
    ```bash
-   git clone https://github.com/your-repo/BootstrapBlazor.Copilot.MCPServer.git
-   cd BootstrapBlazor.Copilot.MCPServer
+   git clone https://github.com/your-repo/BootstrapBlazor.MCPServer.git
+   cd BootstrapBlazor.MCPServer
    ```
 
 2. **恢复依赖**
@@ -86,10 +86,10 @@ BootstrapBlazor.Copilot.MCPServer/
 3. **运行服务**
    ```bash
    # 使用 Aspire（推荐）
-   dotnet run --project BootstrapBlazor.Copilot.MCPServer.AppHost
+   dotnet run --project BootstrapBlazor.MCPServer.AppHost
 
    # 或直接运行主项目
-   dotnet run --project BootstrapBlazor.Copilot.MCPServer
+   dotnet run --project BootstrapBlazor.MCPServer
    ```
 
 4. **验证服务**
@@ -163,7 +163,7 @@ GetFileContent({
   "mcpServers": {
     "bootstrapblazor": {
       "command": "dotnet",
-      "args": ["run", "--project", "path/to/BootstrapBlazor.Copilot.MCPServer"],
+      "args": ["run", "--project", "path/to/BootstrapBlazor.MCPServer"],
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Production"
       }
@@ -254,7 +254,7 @@ public class NewTool
   "Logging": {
     "LogLevel": {
       "Default": "Debug",
-      "BootstrapBlazor.Copilot.MCPServer": "Trace"
+      "BootstrapBlazor.MCPServer": "Trace"
     }
   }
 }

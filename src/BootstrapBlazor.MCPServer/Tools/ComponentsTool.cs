@@ -1,9 +1,14 @@
+﻿// Licensed to the BootstrapBlazor Community under one or more agreements.
+// The BootstrapBlazor Community licenses this file to you under the Apache 2.0 License
+// See the LICENSE file in the project root for more information.
+// Maintainer: Argo Zhang(argo@live.ca) Website: https://www.blazor.zone
+
 using System.ComponentModel;
-using BootstrapBlazor.Copilot.MCPServer.Models;
-using BootstrapBlazor.Copilot.MCPServer.Services;
+using BootstrapBlazor.MCPServer.Models;
+using BootstrapBlazor.MCPServer.Services;
 using ModelContextProtocol.Server;
 
-namespace BootstrapBlazor.Copilot.MCPServer.Tools;
+namespace BootstrapBlazor.MCPServer.Tools;
 
 [McpServerToolType]
 public class ComponentsTool
