@@ -1,12 +1,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36121.58 d17.14
+VisualStudioVersion = 17.14.36121.58
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BootstrapBlazor.Copilot.MCPServer.AppHost", "BootstrapBlazor.Copilot.MCPServer.AppHost\BootstrapBlazor.Copilot.MCPServer.AppHost.csproj", "{31317DBB-6D21-4992-B656-C940B4F771A5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BootstrapBlazor.Copilot.MCPServer.ServiceDefaults", "BootstrapBlazor.Copilot.MCPServer.ServiceDefaults\BootstrapBlazor.Copilot.MCPServer.ServiceDefaults.csproj", "{9301B9F0-4268-9973-F177-31BC81AE6C50}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BootstrapBlazor.Copilot.MCPServer", "BootstrapBlazor.Copilot.MCPServer\BootstrapBlazor.Copilot.MCPServer.csproj", "{0A939EA5-3BAB-8284-28AF-99F271B9715D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,10 +20,6 @@ Global
 		{9301B9F0-4268-9973-F177-31BC81AE6C50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9301B9F0-4268-9973-F177-31BC81AE6C50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9301B9F0-4268-9973-F177-31BC81AE6C50}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0A939EA5-3BAB-8284-28AF-99F271B9715D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0A939EA5-3BAB-8284-28AF-99F271B9715D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0A939EA5-3BAB-8284-28AF-99F271B9715D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0A939EA5-3BAB-8284-28AF-99F271B9715D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
